@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package pb;
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/rickyjia2018/peakpal-server/pb";
+
+// FileType 枚举：确定文件是永久存储还是临时存储
+enum FileType {
+    PERMANENT = 0;  // 永久存储
+    TEMPORARY = 1;  // 临时存储，过期后自动删除
+}
+
+// FileVisibility 枚举：确定文件的可见性
+enum FileVisibility {
+    PUBLIC = 0;  // 公共文件
+    PRIVATE = 1; // 私有文件
+}
+
+message UploadedFile {
+    string file_name = 1;
+    int64 user_id = 2;
+    int64 file_size = 3;
+    string file_type = 4;
+    string file_path = 5;
+    string category = 6;
+    bool in_use = 7;
+    string bucket_name = 8;
+    google.protobuf.Timestamp created_at = 9;
+    google.protobuf.Timestamp expired_at = 10;
+}
+
+message ConfirmUploadRequest {
+    string file_name = 1;
+    int64 file_size = 2;
+    string file_type = 3;
+    string category = 4;
+    string bucket_name = 5;
+    bool in_use = 6;
+    google.protobuf.Timestamp expired_at = 7;
+    string file_path = 8;
+}
+
+message ConfirmUploadResponse {
+    UploadedFile uploaded_file = 1;
+}
+
+// 上传文件的请求
+message GCSUploadPresignUrlRequest {
+    string file_name = 2;  // 文件名
+    FileType file_type = 3;  // 文件类型 (永久或临时)
+    bool is_private = 4;  // 文件可见性 (公共或私有)
+    google.protobuf.Timestamp expired_at = 5;
+
+}
+
+// 获取上传文件预签名 URL 的响应
+message GCSUploadPresignUrlResponse {
+    string presigned_url = 1;  // 上传文件的预签名 URL
+    string file_url = 2; // path to file in s3
+    string message = 3;  // 成功消息或错误提示
+}
+
+// 获取查看文件预签名 URL 的请求
+message GCSFetchPresignUrlRequest {
+    string file_url = 1;  // 文件的存储 URL
+    bool is_private = 2;  // 文件可见性 (公共或私有)
+}
+
+// 获取查看文件预签名 URL 的响应
+message GCSFetchPresignUrlResponse {
+    string presigned_url = 1;  // 查看文件的预签名 URL
+    string message = 2;  // 成功消息或错误提示
+}
+
+
+/************* Below is upload to hosting server ****************/
+// The metadata of the file
+message FileInfo {
+  string file_name = 1;  // The name of the file
+  string file_type = 2;  // File type, e.g., image/jpeg
+}
+
+// The request message for file upload
+message UploadFileRequest {
+  // Metadata about the file (name, type, etc.)
+  oneof data {
+    FileInfo info = 1;
+    // The actual file content, sent in chunks
+    bytes file_chunk = 2;
+  }
+}
+
+
+// The response message for file upload
+message UploadFileResponse {
+  string file_path = 1;  // Upload status message
+  uint64 file_size = 3;   // File size in bytes
+
+}

@@ -1,0 +1,23 @@
+name: snowpro_upload_module_example
+description: Demonstrates how to use the snowpro_upload_module.
+publish_to: 'none' # Remove this line if you wish to publish this package
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  snowpro_upload_module:
+    path: ../
+  grpc: ^3.2.4 # Required for ClientChannel in example
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
