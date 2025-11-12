@@ -18,13 +18,15 @@ class _MyAppState extends State<MyApp> {
   String _uploadStatus = 'Ready';
   double _uploadProgress = 0.0;
   String? _uploadedFileUrl;
+  final TextEditingController _authTokenController = TextEditingController(); // Controller for token input
+  String? _currentAuthToken; // To store the current token
 
   // TODO: Replace with your actual server address and port
   static const String _serverAddress = 'localhost';
   static const int _serverPort = 9090;
 
   late final ClientChannel _channel;
-  late final UploadService _uploadService;
+  late UploadService _uploadService; // Make it late and not final, so it can be re-initialized
 
   @override
   void initState() {
@@ -36,12 +38,20 @@ class _MyAppState extends State<MyApp> {
         credentials: ChannelCredentials.insecure(), // Use secure credentials in production
       ),
     );
-    _uploadService = UploadService(_channel);
+    _initializeUploadService(); // Initialize service here
+  }
+
+  void _initializeUploadService() {
+    _uploadService = UploadService(
+      _channel,
+      authToken: _currentAuthToken, // Pass the current token
+    );
   }
 
   @override
   void dispose() {
     _channel.shutdown();
+    _authTokenController.dispose(); // Dispose the controller
     super.dispose();
   }
 
@@ -96,6 +106,20 @@ class _MyAppState extends State<MyApp> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                TextFormField(
+                  controller: _authTokenController,
+                  decoration: const InputDecoration(
+                    labelText: 'Auth Token (Bearer)',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _currentAuthToken = value;
+                      _initializeUploadService(); // Re-initialize service with new token
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
                 Text(_uploadStatus),
                 const SizedBox(height: 20),
                 LinearProgressIndicator(value: _uploadProgress),
