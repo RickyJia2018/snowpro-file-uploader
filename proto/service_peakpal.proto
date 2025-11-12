@@ -1,0 +1,893 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/api/annotations.proto";
+import "rpc_resend_verification_email.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "rpc_reset_password.proto";
+import "rpc_token_product.proto";
+import "rpc_file_system.proto";
+import "rpc_user.proto";
+import "rpc_login_user.proto";
+import "rpc_verify_email.proto";
+import "rpc_refresh_token.proto";
+import "rpc_authorize_user.proto";
+import "rpc_country.proto";
+import "rpc_resort.proto";
+import "rpc_forget_password.proto";
+import "rpc_certificate_type.proto";
+import "rpc_instructor.proto";
+import "rpc_instructor_certificate.proto";
+import "rpc_token_system.proto";
+import "rpc_chat_system.proto";
+import "rpc_lesson.proto";
+import "rpc_code.proto";
+import "rpc_review.proto";
+import "rpc_policy.proto";
+import "google/protobuf/empty.proto";
+
+
+option go_package = "github.com/rickyjia2018/peakpal-server/pb";
+
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {
+        title: "PeakPal API";
+        version: "1.0";
+        contact: {
+            name: "Googuar Inc.";
+            url: "https://googuar.com/";
+            email: "support@googuar.com";
+        };
+    };
+    schemes: [HTTP, HTTPS];  // Use an array of identifiers for HTTP and HTTPS
+    // base_path: "/v1";
+    security_definitions: {
+        security: {
+            key:"bearer"
+            value:{
+                type: TYPE_API_KEY,
+                in: IN_HEADER,
+                name: 'Authorization',
+                description: "Authentication token, prefixed by Bearer: Bearer <token>",
+            }
+        }
+    };
+    security: {
+        security_requirement: {
+          key: "bearer"
+        }
+      };
+};
+
+service PeakPal {
+    /*=========== File System =========*/
+    // 获取上传文件的预签名 URL
+    rpc GetGCSUploadPresignUrl (GCSUploadPresignUrlRequest) returns (GCSUploadPresignUrlResponse){
+        option (google.api.http) = {
+            get: "/get_gcs_upload_presign_url"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to get presign url for file upload to GCS";
+            summary: "GCS Presign URL for file upload";
+            tags: ["File"];
+        };
+    }
+
+    // 获取查看文件的预签名 URL
+    rpc GetGCSFetchPresignUrl (GCSFetchPresignUrlRequest) returns (GCSFetchPresignUrlResponse){
+        option (google.api.http) = {
+            get: "/get_gcs_fetch_presign_url"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to get presign url for file view from GCS";
+            summary: "GCS Presign URL for file download/view";
+            tags: ["File"];
+        };
+    }
+
+    // 删除 GCS 文件
+    rpc GCSDeleteFile (GCSFetchPresignUrlRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            delete: "/delete_gcs_file"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to delete a file from GCS";
+            summary: "Delete GCS File";
+            tags: ["File"];
+        };
+    }
+
+    // 直接上传文件到 GCS (服务器端处理)
+    rpc GCSUploadFile (stream UploadFileRequest) returns (UploadFileResponse){
+        option (google.api.http) = {
+            post: "/gcs_upload_file"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to upload files directly to GCS (server-side processing).";
+            summary: "Upload Files to GCS";
+            tags: ["File"];
+        };
+    }
+
+    rpc Upload(stream UploadFileRequest) returns (UploadFileResponse){
+        option (google.api.http) = {
+            post: "/upload"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to upload files.";
+            summary: "Upload Files";
+            tags: ["File"];
+        };
+    }
+
+    rpc ConfirmUpload(ConfirmUploadRequest) returns (ConfirmUploadResponse) {
+        option (google.api.http) = {
+            post: "/confirm_upload",
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to confirm a file has been successfully uploaded.";
+            summary: "Confirm Upload";
+            tags: ["File"];
+        };
+    }
+
+    /*===========User & Auth =========*/
+
+    rpc GetUser (GetUserRequest) returns (GetUserResponse){
+        option (google.api.http) = {
+            get: "/get_user"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to get user by ID";
+            summary: "Get User";
+            tags: ["User"];
+        };
+    }
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/create_user"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to create a new user";
+            summary: "Create new user";
+            security: { };
+            tags: ["User"];
+        };
+    }
+    rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse) {
+        option (google.api.http) = {
+            patch: "/update_user"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to update user";
+            summary: "Update user";
+            tags: ["User"];
+        };
+    }
+    rpc UpdateUserLanguage (UpdateLanguageRequest) returns  (google.protobuf.Empty);
+
+    rpc ListUsers (ListUsersRequest) returns (ListUsersResponse) {
+        option (google.api.http) = {
+            get: "/list_users"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to list users with pagination, search, and filtering.";
+            summary: "List Users";
+            tags: ["User"];
+        };
+    }
+
+
+    rpc UpdateUserLoginEmail (UpdateUserLoginEmailRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            post: "/update_login_email"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "if old password is wrong return unauthenticated";
+            summary: "update user email";
+            security: { };
+            tags: ["Authentication"];
+        };
+    }
+    rpc UpdateUserPassword (UpdateUserPasswordRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            post: "/update_password"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "if old password is wrong return unauthenticated";
+            summary: "update user pw";
+            security: { };
+            tags: ["Authentication"];
+        };
+    }
+    rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
+        option (google.api.http) = {
+            post: "/login_user"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to login user and get access token & refresh token";
+            summary: "Login user";
+            security: { };
+            tags: ["Authentication"];
+        };
+    }
+    rpc LogoutUser (LogoutUserRequest) returns (LogoutUserResponse) {
+        option (google.api.http) = {
+            post: "/logout_user"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to clear auth record";
+            summary: "Logout user";
+            security: { };
+            tags:["Authentication"];
+        };
+    }
+
+    rpc VerifyEmail (VerifyEmailRequest) returns (VerifyEmailResponse) {
+        option (google.api.http) = {
+            get: "/verify_email"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to verify user's email address";
+            summary: "Verify email";
+            security: { };
+            tags: ["Authentication"];
+        };
+    }
+
+    rpc ResendVerificationEmail (ResendVerificationEmailRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/resend_verify_email"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to resend verification email";
+            summary: "Resend Verification Email";
+            security: { };
+            tags: ["Authentication"];
+        };
+    }
+
+    rpc ForgetPassword (ForgetPasswordRequest) returns(ForgetPasswordResponse){
+        option (google.api.http) = {
+            post: "/forget_password"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to initiate the password reset process by sending a reset link to the user's email address.";
+            summary: "Initiate password reset";
+            security: { };
+            tags:["User"];
+        };
+    }
+
+    rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse) {
+        option (google.api.http) = {
+            post: "/reset_password"
+            body: "*"
+        };
+          option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to reset the user's password using a valid short-lived token obtained from the verification step.";
+            summary: "Reset password with token";
+            security: { };
+            tags:["User"];
+        };
+  }
+
+  rpc VerifyForgotPasswordToken (VerifyForgotPasswordTokenRequest) returns (VerifyForgotPasswordTokenResponse) {
+        option (google.api.http) = {
+            post: "/verify_forgot_password_token"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to verify the long-lived forgot password token and return a short-lived token.";
+            summary: "Verify Forgot Password Token";
+            security: { };
+            tags:["User"];
+        };
+  }
+
+    rpc AuthorizeUser (AuthorizeUserRequest) returns (AuthorizeUserResponse) {
+        option (google.api.http) = {
+            get: "/authorize_user"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to verify user's access token";
+            summary: "Authorize user";
+            security: { };
+            tags: ["Authentication"];
+        };
+    }
+    rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse) {
+        option (google.api.http) = {
+            post: "/refresh_token"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to refresh user's access token";
+            summary: "Refresh Access Token";
+            security: { };
+            tags: ["Authentication"];
+        };
+    }
+    /*===========Country =========*/
+    rpc CreateCountry (CreateCountryRequest) returns (CreateCountryResponse) {
+        option (google.api.http) = {
+            post: "/create_country"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to create a new Country";
+            summary: "Create new country";
+            tags:["Country"];
+        };
+    }
+    rpc GetCountry (GetCountryRequest) returns(GetCountryResponse){
+        option (google.api.http) = {
+            get: "/get_country"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to fetch one country";
+            summary: "Get one country";
+            tags:["Country"];
+        };
+    }
+    rpc ListCountries (ListCountriesRequest) returns  (ListCountriesResponse){
+        option (google.api.http) = {
+            get: "/list_countries"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to fetch multi countries";
+            summary: "Get many countries";
+            tags:["Country"];
+        };
+    }
+    rpc UpdateCountry(UpdateCountryRequest) returns (UpdateCountryResponse) {
+        option (google.api.http) = {
+            patch: "/update_country"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to update country";
+            summary: "Update country";
+            tags:["Country"];
+        };
+    }
+    rpc DeleteCountry (DeleteCountryRequest) returns (DeleteCountryResponse){
+        option (google.api.http) = {
+            delete: "/delete_country"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to delete country by it's id";
+            summary: "Delete country";
+            tags:["Country"];
+        };
+    }
+    /*===========Resort=========*/
+    rpc fetchResort (google.protobuf.Empty) returns (FetchResortResponse){
+        option (google.api.http) = {
+            post: "/fetch_resorts"
+            // body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to fetch a list of resorts from ";
+            summary: "Create new country";
+            tags:["Resort"];
+        };
+
+    }
+    rpc CreateResort (CreateResortRequest) returns (CreateResortResponse) {
+        option (google.api.http) = {
+            post: "/create_resort"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to create a new Country";
+            summary: "Create new country";
+            tags:["Resort"];
+        };
+    }
+    rpc GetResort (GetResortRequest) returns(GetResortResponse){
+        option (google.api.http) = {
+            get: "/get_resort"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to fetch one resort by ID";
+            summary: "Get one Resort";
+            tags:["Resort"];
+        };
+    }
+    rpc ListResorts (ListResortsRequest) returns  (ListResortsResponse){
+        option (google.api.http) = {
+            get: "/list_resortes"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to query multi resorts by name, country";
+            summary: "List resorts";
+            tags:["Resort"];
+        };
+    }
+    rpc UpdateResort(UpdateResortRequest) returns (UpdateResortResponse) {
+        option (google.api.http) = {
+            patch: "/update_resort"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to update a resort";
+            summary: "Update resort";
+            tags:["Resort"];
+        };
+    }
+    rpc DeleteResort (DeleteResortRequest) returns (DeleteResortResponse){
+        option (google.api.http) = {
+            delete: "/delete_resort"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to delete a resort by it's id";
+            summary: "Delete resort";
+            tags:["Resort"];
+        };
+    }
+    /*===========Certificate Type=========*/
+
+    rpc GetCertificateType(GetCertificateTypeRequest) returns (GetCertificateTypeResponse){
+        option (google.api.http) = {
+            get: "/get_certificate_type"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to fetch one certificate_type by ID";
+            summary: "Get one certificate_type";
+            tags:["Certificate"];
+        };
+    }
+    rpc ListCertificateTypes(ListCertificateTypesRequest) returns (ListCertificateTypesResponse){
+        option (google.api.http) = {
+            get: "/list_certificate_types"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to query multi resorts by name, country";
+            summary: "List resorts";
+            tags:["Certificate"];
+        };
+    }
+    rpc CreateCertificateType(CreateCertificateTypeRequest) returns (CreateCertificateTypeResponse){
+        option (google.api.http) = {
+            post: "/create_certificate_type"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to create a new Certificate type";
+            summary: "Create new Certificate";
+            tags:["Certificate"];
+        };
+    }
+    rpc UpdateCertificateType(UpdateCertificateTypeRequest) returns (UpdateCertificateTypeResponse){
+        option (google.api.http) = {
+            patch: "/update_certificate_type"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to update a certificate";
+            summary: "Update certificate_type";
+            tags:["Certificate"];
+        };
+    }
+    rpc DeleteCertificateType(DeleteCertificateTypeRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            delete: "/delete_certificate_type"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to delete a certificate_type by it's id";
+            summary: "Delete Certificate type";
+            tags:["Certificate"];
+        };
+    }
+
+    /*=========== Instructor =========*/
+    rpc GetInstructor(GetInstructorRequest) returns (GetInstructorResponse){
+        option (google.api.http) = {
+            get: "/get_instructor"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to get one instructor by ID";
+            summary: "Get one instructor";
+            tags:["Instructor"];
+        };
+    }
+
+    // Fetches the public profile of an instructor. No authentication required.
+    rpc GetPublicInstructor (GetPublicInstructorRequest) returns (GetPublicInstructorResponse) {
+        option (google.api.http) = {
+            get: "/v1/public/instructors/{user_id}"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Fetches the public profile of an instructor. No authentication required.";
+            summary: "Get public instructor profile";
+            security: {}; // No security needed for this endpoint
+            tags: ["Public"];
+        };
+    }
+
+    rpc ListInstructors(ListInstructorsRequest) returns (ListInstructorsResponse){
+        option (google.api.http) = {
+            get: "/list_instructors"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Filter by country, resort, cert_type and level. Order by price, level";
+            summary: "List Instructors";
+            tags:["Instructor"];
+        };
+    }
+    rpc CreateInstructor(CreateInstructorRequest) returns (CreateInstructorResponse){
+        option (google.api.http) = {
+            post: "/create_instructor"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API for instructor application";
+            summary: "Create new Instructor";
+            tags:["Instructor"];
+        };
+    }
+
+    rpc UpdateInstructor(UpdateInstructorRequest) returns (UpdateInstructorResponse){
+        option (google.api.http) = {
+            patch: "/update_instructor"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to update a instructor's basic info. Cannot update validation";
+            summary: "Update instructor";
+            tags:["Instructor"];
+        };
+    }
+    rpc UpdateApplicationStatus(UpdateApplicationStatusRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            patch: "/update_application_status"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to update a instructor's validation only";
+            summary: "Update instructor";
+            tags:["Instructor"];
+        };
+    }
+    // // rpc CountInstructors(google.protobuf.Empty) returns (CountInstructorsResponse);
+
+    rpc DeleteInstructor(GetInstructorRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            delete: "/delete_instructor"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to delete a Instructor by it's id";
+            summary: "Delete Instructor";
+            tags:["Instructor"];
+        };
+    }
+    rpc CreateInstructorCertificate(CreateInstructorCertificateRequest) returns (CreateInstructorCertificateResponse){
+        option (google.api.http) = {
+            post: "/create_instructor_certificate"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to Create new Instructor's certificate";
+            summary: "Create new Instructor's certificate";
+            tags:["Instructor's Certificates"];
+        };
+    }
+    // rpc GetInstructorCertificateById(GetInstructorCertificateByIdRequest) returns (GetInstructorCertificateByIdResponse);
+    rpc ListInstructorCertificates(ListInstructorCertificatesRequest) returns (ListInstructorCertificatesResponse){
+        option (google.api.http) = {
+            get: "/list_instructor_certificates"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Query by user_id, cert type, level";
+            summary: "List Instructor's certificates";
+            tags:["Instructor's Certificates"];
+        };
+    }
+    rpc UpdateInstructorCertApprove(UpdateInstructorCertApproveRequest) returns (UpdateInstructorCertApproveResponse){
+        option (google.api.http) = {
+            patch: "/approve_instructor_certificate"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to change approvement status of a certificate related to a instructor";
+            summary: "Update status of Instructor's certificate";
+            tags:["Instructor's Certificates"];
+        };
+    }
+    rpc DeleteInstructorCertificate(DeleteInstructorCertificateRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            delete: "/delete_instructor_certificate"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to delete a certificate related to a instructor";
+            summary: "Delete Instructor's certificate by its id";
+            tags:["Instructor's Certificates"];
+        };
+    }
+
+    /*=========== Chat System =========*/
+    rpc SendMessage(stream SendMessageRequest) returns (stream Message){};
+    rpc GetAllMessage(GetAllMessagesRequest) returns (GetAllMessagesResponse){};
+
+
+    /*===========   Lesson   ===========*/
+    rpc GetLesson(GetLessonRequest) returns (GetLessonResponse){
+        option (google.api.http) = {
+            get: "/get_lesson"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "";
+            summary: "Get a lesson by its id";
+            tags:["Teaching System"];
+        };
+    }
+    rpc CreateLesson(CreateLessonRequest) returns (CreateLessonResponse){
+        option (google.api.http) = {
+            post: "/create_lesson"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API when student apply a teaching lesson from instructor";
+            summary: "Create a lesson record";
+            tags:["Teaching System"];
+        };
+    };
+    rpc UpdateLessonStatus(UpdateLessonRequest) returns (UpdateLessonResponse){
+        option (google.api.http) = {
+            patch: "/update_lesson_status"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to update lesson status - [APPROVED,COMPLETED,REJECTED]";
+            summary: "Update status of lesson";
+            tags:["Teaching System"];
+        };
+    }
+
+    rpc ListLessons(ListLessonRequest) returns (ListLessonResponse);
+
+    rpc CreateLessonComment(CreateLessonCommentRequest) returns (CreateLessonCommentResponse){
+        option (google.api.http) = {
+            post: "/create_lesson_comment"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to create a comment for a lesson";
+            summary: "Create Lesson Comment";
+            tags:["Teaching System"];
+        };
+    }
+
+    rpc ListLessonComments(ListLessonCommentsRequest) returns (ListLessonCommentsResponse){
+        option (google.api.http) = {
+            get: "/list_lesson_comments"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to list comments for a lesson";
+            summary: "List Lesson Comments";
+            tags:["Teaching System"];
+        };
+    }
+
+    /*============ Token Product ==============*/
+
+    rpc CreateTokenProduct(CreateTokenProductRequest) returns (CreateTokenProductResponse){
+        option (google.api.http) = {
+            post: "/admin/token/products"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to create a new token product (Admin only).";
+            summary: "Create Token Product";
+            tags:["Token Product Management"];
+            security: { };
+        };
+    }
+    rpc UpdateTokenProduct(UpdateTokenProductRequest) returns (UpdateTokenProductResponse){
+        option (google.api.http) = {
+            patch: "/admin/token/products"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to update an existing token product (Admin only).";
+            summary: "Update Token Product";
+            tags:["Token Product Management"];
+            security: { };
+        };
+    }
+    rpc DeleteTokenProduct(DeleteTokenProductRequest) returns (DeleteTokenProductResponse){
+        option (google.api.http) = {
+            delete: "/admin/token/products"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to delete a token product (Admin only).";
+            summary: "Delete Token Product";
+            tags:["Token Product Management"];
+            security: { };
+        };
+    }
+    /*=========== Token System =========*/
+
+    rpc GetTokenProducts(GetTokenProductsRequest) returns (GetTokenProductsResponse){
+        option (google.api.http) = {
+            get: "/token/products"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to get a list of available token products.";
+            summary: "Get Token Products";
+            tags:["Token System"];
+        };
+    }
+    rpc InitiateTokenPurchase(InitiateTokenPurchaseRequest) returns (InitiateTokenPurchaseResponse){
+        option (google.api.http) = {
+            post: "/token/purchases"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to initiate a token purchase and create a pending order.";
+            summary: "Initiate Token Purchase";
+            tags:["Token System"];
+        };
+    }
+
+
+    rpc VerifyReceipt(VerifyReceiptRequest) returns (VerifyReceiptResponse){
+        
+        option (google.api.http) = {
+            post: "/verify_receipt"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to verify receipt from apple pay/google pay etc..";
+            summary: "Verify receipt from 3rd payment party";
+            tags:["Token System"];
+        };
+    }
+    rpc CancelTokenPurchase(CancelTokenPurchaseRequest) returns (CancelTokenPurchaseResponse){
+            option (google.api.http) = {
+                post: "/token-purchases/{order_id}/cancel"
+                body: "*"
+            };
+            option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+                description: "Use this API to cancel a pending token purchase.";
+                summary: "Cancel Token Purchase";
+                tags:["Token System"];
+        };
+    }
+    rpc PaypalPayout(google.protobuf.Empty) returns (PayoutResponse){
+        option (google.api.http) = {
+            post: "/paypal_payout"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to pay salary to instructors whose balance >10 Token";
+            summary: "batch pay out";
+            tags:["Token System"];
+        };  
+      }
+    rpc LinkPaypalAccount(LinkPaypalAccountRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            post: "/link_paypal_account"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to bind user's account to server based on Email Address";
+            summary: "link paypal account to our server";
+            tags:["Token System"];
+        };  
+    }
+    rpc UnlinkPaypalAccount(google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc GetLinkPaypalUrl(google.protobuf.Empty) returns (GetLinkPaypalUrlResponse);
+
+
+    /*=========== Codes =========*/
+    rpc GetCode(GetCodeRequest) returns (GetCodeResponse){
+        option (google.api.http) = {
+            get: "/get_code"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to get a code by code";
+            summary: "get one code";
+            tags:["Codes"];
+        };
+    }
+    rpc CreateCodes(CreateCodeRequest) returns (CreateCodeResponse){
+        option (google.api.http) = {
+            post: "/create_codes"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to create multi code by number";
+            summary: "create codes";
+            tags:["Codes"];
+        };
+    }
+    rpc UseCode(UseCodeRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            post: "/use_code"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to use a code";
+            tags:["Codes"];
+
+        };
+    }
+    rpc DeleteCode(DeleteCodeRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            delete: "/delete_code"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to delete a code. param: code";
+            tags:["Codes"];
+
+        };
+    }
+    rpc ListCodes(ListCodeRequest) returns (ListCodeResponse){
+        option (google.api.http) = {
+            get: "/list_codes"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to list codes with pagination and filtering.";
+            summary: "List codes";
+            tags:["Codes"];
+        };
+    }
+        /*=========== Reviews =========*/
+
+    rpc CreateReview(CreateReviewRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            post: "/create_review"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to create a review related to a user, , auto recalculate star";
+            tags:["Reviews"];
+
+        };
+    }
+    rpc DeleteReview(DeleteReviewRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            delete: "/delete_review"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to delet a review related to a user, auto recalculate star";
+            tags:["Reviews"];
+
+        };
+    }
+    rpc GetLessonReview(GetLessonReviewRequest) returns (GetLessonReviewResponse);
+    rpc ListReviews(ListReviewsRequest) returns (ListReviewsResponse){
+        option (google.api.http) = {
+            get: "/list_reviews"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to create a review related to a user";
+            tags:["Reviews"];
+
+        };
+    }
+
+
+
+        /*=========== Policy =========*/
+    rpc CreatePolicy(CreatePolicyRequest) returns (PolicyVersionResponse);
+    rpc ListPolicies(ListPoliciesRequest) returns (ListPoliciesResponse);
+    rpc UpdatePolicy(UpdatePolicyRequest) returns (PolicyVersionResponse);;
+    rpc DeletePolicy(DeletePolicyRequest) returns (google.protobuf.Empty);  
+    rpc GetLatestPolicy(GetLatestPolicyRequest) returns (GetLatestPolicyResponse);
+    rpc AcceptPolicy(AcceptPolicyRequest) returns (google.protobuf.Empty);  
+
+}

@@ -2,9 +2,9 @@
 //  Generated code. Do not modify.
 //  source: rpc_file_system.proto
 //
-// @dart = 3.3
+// @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: annotate_overrides, camel_case_types
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -13,7 +13,6 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-/// FileType 枚举：确定文件是永久存储还是临时存储
 class FileType extends $pb.ProtobufEnum {
   static const FileType PERMANENT = FileType._(0, _omitEnumNames ? '' : 'PERMANENT');
   static const FileType TEMPORARY = FileType._(1, _omitEnumNames ? '' : 'TEMPORARY');
@@ -26,10 +25,9 @@ class FileType extends $pb.ProtobufEnum {
   static final $core.Map<$core.int, FileType> _byValue = $pb.ProtobufEnum.initByValue(values);
   static FileType? valueOf($core.int value) => _byValue[value];
 
-  const FileType._(super.v, super.n);
+  const FileType._($core.int v, $core.String n) : super(v, n);
 }
 
-/// FileVisibility 枚举：确定文件的可见性
 class FileVisibility extends $pb.ProtobufEnum {
   static const FileVisibility PUBLIC = FileVisibility._(0, _omitEnumNames ? '' : 'PUBLIC');
   static const FileVisibility PRIVATE = FileVisibility._(1, _omitEnumNames ? '' : 'PRIVATE');
@@ -42,7 +40,7 @@ class FileVisibility extends $pb.ProtobufEnum {
   static final $core.Map<$core.int, FileVisibility> _byValue = $pb.ProtobufEnum.initByValue(values);
   static FileVisibility? valueOf($core.int value) => _byValue[value];
 
-  const FileVisibility._(super.v, super.n);
+  const FileVisibility._($core.int v, $core.String n) : super(v, n);
 }
 
 

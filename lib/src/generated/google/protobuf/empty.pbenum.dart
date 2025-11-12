@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: google/protobuf/timestamp.proto
+//  source: google/protobuf/empty.proto
 //
 // @dart = 2.12
 

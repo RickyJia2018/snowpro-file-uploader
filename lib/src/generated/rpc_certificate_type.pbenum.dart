@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: google/protobuf/timestamp.proto
+//  source: rpc_certificate_type.proto
 //
 // @dart = 2.12
 

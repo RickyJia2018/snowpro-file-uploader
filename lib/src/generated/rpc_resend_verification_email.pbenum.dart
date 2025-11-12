@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: google/protobuf/timestamp.proto
+//  source: rpc_resend_verification_email.proto
 //
 // @dart = 2.12
 

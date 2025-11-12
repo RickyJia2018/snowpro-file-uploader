@@ -2,9 +2,9 @@
 //  Generated code. Do not modify.
 //  source: rpc_file_system.proto
 //
-// @dart = 3.3
+// @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: annotate_overrides, camel_case_types
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -14,59 +14,13 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'google/protobuf/timestamp.pb.dart' as $0;
+import 'google/protobuf/timestamp.pb.dart' as $23;
 import 'rpc_file_system.pbenum.dart';
-
-export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
 export 'rpc_file_system.pbenum.dart';
 
 class UploadedFile extends $pb.GeneratedMessage {
-  factory UploadedFile({
-    $core.String? fileName,
-    $fixnum.Int64? userId,
-    $fixnum.Int64? fileSize,
-    $core.String? fileType,
-    $core.String? filePath,
-    $core.String? category,
-    $core.bool? inUse,
-    $core.String? bucketName,
-    $0.Timestamp? createdAt,
-    $0.Timestamp? expiredAt,
-  }) {
-    final $result = create();
-    if (fileName != null) {
-      $result.fileName = fileName;
-    }
-    if (userId != null) {
-      $result.userId = userId;
-    }
-    if (fileSize != null) {
-      $result.fileSize = fileSize;
-    }
-    if (fileType != null) {
-      $result.fileType = fileType;
-    }
-    if (filePath != null) {
-      $result.filePath = filePath;
-    }
-    if (category != null) {
-      $result.category = category;
-    }
-    if (inUse != null) {
-      $result.inUse = inUse;
-    }
-    if (bucketName != null) {
-      $result.bucketName = bucketName;
-    }
-    if (createdAt != null) {
-      $result.createdAt = createdAt;
-    }
-    if (expiredAt != null) {
-      $result.expiredAt = expiredAt;
-    }
-    return $result;
-  }
+  factory UploadedFile() => create();
   UploadedFile._() : super();
   factory UploadedFile.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UploadedFile.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -80,8 +34,8 @@ class UploadedFile extends $pb.GeneratedMessage {
     ..aOS(6, _omitFieldNames ? '' : 'category')
     ..aOB(7, _omitFieldNames ? '' : 'inUse')
     ..aOS(8, _omitFieldNames ? '' : 'bucketName')
-    ..aOM<$0.Timestamp>(9, _omitFieldNames ? '' : 'createdAt', subBuilder: $0.Timestamp.create)
-    ..aOM<$0.Timestamp>(10, _omitFieldNames ? '' : 'expiredAt', subBuilder: $0.Timestamp.create)
+    ..aOM<$23.Timestamp>(9, _omitFieldNames ? '' : 'createdAt', subBuilder: $23.Timestamp.create)
+    ..aOM<$23.Timestamp>(10, _omitFieldNames ? '' : 'expiredAt', subBuilder: $23.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -113,7 +67,7 @@ class UploadedFile extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasFileName() => $_has(0);
   @$pb.TagNumber(1)
-  void clearFileName() => $_clearField(1);
+  void clearFileName() => clearField(1);
 
   @$pb.TagNumber(2)
   $fixnum.Int64 get userId => $_getI64(1);
@@ -122,7 +76,7 @@ class UploadedFile extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasUserId() => $_has(1);
   @$pb.TagNumber(2)
-  void clearUserId() => $_clearField(2);
+  void clearUserId() => clearField(2);
 
   @$pb.TagNumber(3)
   $fixnum.Int64 get fileSize => $_getI64(2);
@@ -131,7 +85,7 @@ class UploadedFile extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasFileSize() => $_has(2);
   @$pb.TagNumber(3)
-  void clearFileSize() => $_clearField(3);
+  void clearFileSize() => clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get fileType => $_getSZ(3);
@@ -140,7 +94,7 @@ class UploadedFile extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool hasFileType() => $_has(3);
   @$pb.TagNumber(4)
-  void clearFileType() => $_clearField(4);
+  void clearFileType() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.String get filePath => $_getSZ(4);
@@ -149,7 +103,7 @@ class UploadedFile extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.bool hasFilePath() => $_has(4);
   @$pb.TagNumber(5)
-  void clearFilePath() => $_clearField(5);
+  void clearFilePath() => clearField(5);
 
   @$pb.TagNumber(6)
   $core.String get category => $_getSZ(5);
@@ -158,7 +112,7 @@ class UploadedFile extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.bool hasCategory() => $_has(5);
   @$pb.TagNumber(6)
-  void clearCategory() => $_clearField(6);
+  void clearCategory() => clearField(6);
 
   @$pb.TagNumber(7)
   $core.bool get inUse => $_getBF(6);
@@ -167,7 +121,7 @@ class UploadedFile extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.bool hasInUse() => $_has(6);
   @$pb.TagNumber(7)
-  void clearInUse() => $_clearField(7);
+  void clearInUse() => clearField(7);
 
   @$pb.TagNumber(8)
   $core.String get bucketName => $_getSZ(7);
@@ -176,69 +130,33 @@ class UploadedFile extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $core.bool hasBucketName() => $_has(7);
   @$pb.TagNumber(8)
-  void clearBucketName() => $_clearField(8);
+  void clearBucketName() => clearField(8);
 
   @$pb.TagNumber(9)
-  $0.Timestamp get createdAt => $_getN(8);
+  $23.Timestamp get createdAt => $_getN(8);
   @$pb.TagNumber(9)
-  set createdAt($0.Timestamp v) { $_setField(9, v); }
+  set createdAt($23.Timestamp v) { setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasCreatedAt() => $_has(8);
   @$pb.TagNumber(9)
-  void clearCreatedAt() => $_clearField(9);
+  void clearCreatedAt() => clearField(9);
   @$pb.TagNumber(9)
-  $0.Timestamp ensureCreatedAt() => $_ensure(8);
+  $23.Timestamp ensureCreatedAt() => $_ensure(8);
 
   @$pb.TagNumber(10)
-  $0.Timestamp get expiredAt => $_getN(9);
+  $23.Timestamp get expiredAt => $_getN(9);
   @$pb.TagNumber(10)
-  set expiredAt($0.Timestamp v) { $_setField(10, v); }
+  set expiredAt($23.Timestamp v) { setField(10, v); }
   @$pb.TagNumber(10)
   $core.bool hasExpiredAt() => $_has(9);
   @$pb.TagNumber(10)
-  void clearExpiredAt() => $_clearField(10);
+  void clearExpiredAt() => clearField(10);
   @$pb.TagNumber(10)
-  $0.Timestamp ensureExpiredAt() => $_ensure(9);
+  $23.Timestamp ensureExpiredAt() => $_ensure(9);
 }
 
 class ConfirmUploadRequest extends $pb.GeneratedMessage {
-  factory ConfirmUploadRequest({
-    $core.String? fileName,
-    $fixnum.Int64? fileSize,
-    $core.String? fileType,
-    $core.String? category,
-    $core.String? bucketName,
-    $core.bool? inUse,
-    $0.Timestamp? expiredAt,
-    $core.String? filePath,
-  }) {
-    final $result = create();
-    if (fileName != null) {
-      $result.fileName = fileName;
-    }
-    if (fileSize != null) {
-      $result.fileSize = fileSize;
-    }
-    if (fileType != null) {
-      $result.fileType = fileType;
-    }
-    if (category != null) {
-      $result.category = category;
-    }
-    if (bucketName != null) {
-      $result.bucketName = bucketName;
-    }
-    if (inUse != null) {
-      $result.inUse = inUse;
-    }
-    if (expiredAt != null) {
-      $result.expiredAt = expiredAt;
-    }
-    if (filePath != null) {
-      $result.filePath = filePath;
-    }
-    return $result;
-  }
+  factory ConfirmUploadRequest() => create();
   ConfirmUploadRequest._() : super();
   factory ConfirmUploadRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ConfirmUploadRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -250,7 +168,7 @@ class ConfirmUploadRequest extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'category')
     ..aOS(5, _omitFieldNames ? '' : 'bucketName')
     ..aOB(6, _omitFieldNames ? '' : 'inUse')
-    ..aOM<$0.Timestamp>(7, _omitFieldNames ? '' : 'expiredAt', subBuilder: $0.Timestamp.create)
+    ..aOM<$23.Timestamp>(7, _omitFieldNames ? '' : 'expiredAt', subBuilder: $23.Timestamp.create)
     ..aOS(8, _omitFieldNames ? '' : 'filePath')
     ..hasRequiredFields = false
   ;
@@ -283,7 +201,7 @@ class ConfirmUploadRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasFileName() => $_has(0);
   @$pb.TagNumber(1)
-  void clearFileName() => $_clearField(1);
+  void clearFileName() => clearField(1);
 
   @$pb.TagNumber(2)
   $fixnum.Int64 get fileSize => $_getI64(1);
@@ -292,7 +210,7 @@ class ConfirmUploadRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasFileSize() => $_has(1);
   @$pb.TagNumber(2)
-  void clearFileSize() => $_clearField(2);
+  void clearFileSize() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get fileType => $_getSZ(2);
@@ -301,7 +219,7 @@ class ConfirmUploadRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasFileType() => $_has(2);
   @$pb.TagNumber(3)
-  void clearFileType() => $_clearField(3);
+  void clearFileType() => clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get category => $_getSZ(3);
@@ -310,7 +228,7 @@ class ConfirmUploadRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool hasCategory() => $_has(3);
   @$pb.TagNumber(4)
-  void clearCategory() => $_clearField(4);
+  void clearCategory() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.String get bucketName => $_getSZ(4);
@@ -319,7 +237,7 @@ class ConfirmUploadRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.bool hasBucketName() => $_has(4);
   @$pb.TagNumber(5)
-  void clearBucketName() => $_clearField(5);
+  void clearBucketName() => clearField(5);
 
   @$pb.TagNumber(6)
   $core.bool get inUse => $_getBF(5);
@@ -328,18 +246,18 @@ class ConfirmUploadRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.bool hasInUse() => $_has(5);
   @$pb.TagNumber(6)
-  void clearInUse() => $_clearField(6);
+  void clearInUse() => clearField(6);
 
   @$pb.TagNumber(7)
-  $0.Timestamp get expiredAt => $_getN(6);
+  $23.Timestamp get expiredAt => $_getN(6);
   @$pb.TagNumber(7)
-  set expiredAt($0.Timestamp v) { $_setField(7, v); }
+  set expiredAt($23.Timestamp v) { setField(7, v); }
   @$pb.TagNumber(7)
   $core.bool hasExpiredAt() => $_has(6);
   @$pb.TagNumber(7)
-  void clearExpiredAt() => $_clearField(7);
+  void clearExpiredAt() => clearField(7);
   @$pb.TagNumber(7)
-  $0.Timestamp ensureExpiredAt() => $_ensure(6);
+  $23.Timestamp ensureExpiredAt() => $_ensure(6);
 
   @$pb.TagNumber(8)
   $core.String get filePath => $_getSZ(7);
@@ -348,19 +266,11 @@ class ConfirmUploadRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $core.bool hasFilePath() => $_has(7);
   @$pb.TagNumber(8)
-  void clearFilePath() => $_clearField(8);
+  void clearFilePath() => clearField(8);
 }
 
 class ConfirmUploadResponse extends $pb.GeneratedMessage {
-  factory ConfirmUploadResponse({
-    UploadedFile? uploadedFile,
-  }) {
-    final $result = create();
-    if (uploadedFile != null) {
-      $result.uploadedFile = uploadedFile;
-    }
-    return $result;
-  }
+  factory ConfirmUploadResponse() => create();
   ConfirmUploadResponse._() : super();
   factory ConfirmUploadResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ConfirmUploadResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -394,38 +304,17 @@ class ConfirmUploadResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   UploadedFile get uploadedFile => $_getN(0);
   @$pb.TagNumber(1)
-  set uploadedFile(UploadedFile v) { $_setField(1, v); }
+  set uploadedFile(UploadedFile v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasUploadedFile() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUploadedFile() => $_clearField(1);
+  void clearUploadedFile() => clearField(1);
   @$pb.TagNumber(1)
   UploadedFile ensureUploadedFile() => $_ensure(0);
 }
 
-/// 上传文件的请求
 class GCSUploadPresignUrlRequest extends $pb.GeneratedMessage {
-  factory GCSUploadPresignUrlRequest({
-    $core.String? fileName,
-    FileType? fileType,
-    $core.bool? isPrivate,
-    $0.Timestamp? expiredAt,
-  }) {
-    final $result = create();
-    if (fileName != null) {
-      $result.fileName = fileName;
-    }
-    if (fileType != null) {
-      $result.fileType = fileType;
-    }
-    if (isPrivate != null) {
-      $result.isPrivate = isPrivate;
-    }
-    if (expiredAt != null) {
-      $result.expiredAt = expiredAt;
-    }
-    return $result;
-  }
+  factory GCSUploadPresignUrlRequest() => create();
   GCSUploadPresignUrlRequest._() : super();
   factory GCSUploadPresignUrlRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GCSUploadPresignUrlRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -434,7 +323,7 @@ class GCSUploadPresignUrlRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'fileName')
     ..e<FileType>(3, _omitFieldNames ? '' : 'fileType', $pb.PbFieldType.OE, defaultOrMaker: FileType.PERMANENT, valueOf: FileType.valueOf, enumValues: FileType.values)
     ..aOB(4, _omitFieldNames ? '' : 'isPrivate')
-    ..aOM<$0.Timestamp>(5, _omitFieldNames ? '' : 'expiredAt', subBuilder: $0.Timestamp.create)
+    ..aOM<$23.Timestamp>(5, _omitFieldNames ? '' : 'expiredAt', subBuilder: $23.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -466,16 +355,16 @@ class GCSUploadPresignUrlRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasFileName() => $_has(0);
   @$pb.TagNumber(2)
-  void clearFileName() => $_clearField(2);
+  void clearFileName() => clearField(2);
 
   @$pb.TagNumber(3)
   FileType get fileType => $_getN(1);
   @$pb.TagNumber(3)
-  set fileType(FileType v) { $_setField(3, v); }
+  set fileType(FileType v) { setField(3, v); }
   @$pb.TagNumber(3)
   $core.bool hasFileType() => $_has(1);
   @$pb.TagNumber(3)
-  void clearFileType() => $_clearField(3);
+  void clearFileType() => clearField(3);
 
   @$pb.TagNumber(4)
   $core.bool get isPrivate => $_getBF(2);
@@ -484,39 +373,22 @@ class GCSUploadPresignUrlRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool hasIsPrivate() => $_has(2);
   @$pb.TagNumber(4)
-  void clearIsPrivate() => $_clearField(4);
+  void clearIsPrivate() => clearField(4);
 
   @$pb.TagNumber(5)
-  $0.Timestamp get expiredAt => $_getN(3);
+  $23.Timestamp get expiredAt => $_getN(3);
   @$pb.TagNumber(5)
-  set expiredAt($0.Timestamp v) { $_setField(5, v); }
+  set expiredAt($23.Timestamp v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasExpiredAt() => $_has(3);
   @$pb.TagNumber(5)
-  void clearExpiredAt() => $_clearField(5);
+  void clearExpiredAt() => clearField(5);
   @$pb.TagNumber(5)
-  $0.Timestamp ensureExpiredAt() => $_ensure(3);
+  $23.Timestamp ensureExpiredAt() => $_ensure(3);
 }
 
-/// 获取上传文件预签名 URL 的响应
 class GCSUploadPresignUrlResponse extends $pb.GeneratedMessage {
-  factory GCSUploadPresignUrlResponse({
-    $core.String? presignedUrl,
-    $core.String? fileUrl,
-    $core.String? message,
-  }) {
-    final $result = create();
-    if (presignedUrl != null) {
-      $result.presignedUrl = presignedUrl;
-    }
-    if (fileUrl != null) {
-      $result.fileUrl = fileUrl;
-    }
-    if (message != null) {
-      $result.message = message;
-    }
-    return $result;
-  }
+  factory GCSUploadPresignUrlResponse() => create();
   GCSUploadPresignUrlResponse._() : super();
   factory GCSUploadPresignUrlResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GCSUploadPresignUrlResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -556,7 +428,7 @@ class GCSUploadPresignUrlResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasPresignedUrl() => $_has(0);
   @$pb.TagNumber(1)
-  void clearPresignedUrl() => $_clearField(1);
+  void clearPresignedUrl() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get fileUrl => $_getSZ(1);
@@ -565,7 +437,7 @@ class GCSUploadPresignUrlResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasFileUrl() => $_has(1);
   @$pb.TagNumber(2)
-  void clearFileUrl() => $_clearField(2);
+  void clearFileUrl() => clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get message => $_getSZ(2);
@@ -574,24 +446,11 @@ class GCSUploadPresignUrlResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasMessage() => $_has(2);
   @$pb.TagNumber(3)
-  void clearMessage() => $_clearField(3);
+  void clearMessage() => clearField(3);
 }
 
-/// 获取查看文件预签名 URL 的请求
 class GCSFetchPresignUrlRequest extends $pb.GeneratedMessage {
-  factory GCSFetchPresignUrlRequest({
-    $core.String? fileUrl,
-    $core.bool? isPrivate,
-  }) {
-    final $result = create();
-    if (fileUrl != null) {
-      $result.fileUrl = fileUrl;
-    }
-    if (isPrivate != null) {
-      $result.isPrivate = isPrivate;
-    }
-    return $result;
-  }
+  factory GCSFetchPresignUrlRequest() => create();
   GCSFetchPresignUrlRequest._() : super();
   factory GCSFetchPresignUrlRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GCSFetchPresignUrlRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -630,7 +489,7 @@ class GCSFetchPresignUrlRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasFileUrl() => $_has(0);
   @$pb.TagNumber(1)
-  void clearFileUrl() => $_clearField(1);
+  void clearFileUrl() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.bool get isPrivate => $_getBF(1);
@@ -639,24 +498,11 @@ class GCSFetchPresignUrlRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasIsPrivate() => $_has(1);
   @$pb.TagNumber(2)
-  void clearIsPrivate() => $_clearField(2);
+  void clearIsPrivate() => clearField(2);
 }
 
-/// 获取查看文件预签名 URL 的响应
 class GCSFetchPresignUrlResponse extends $pb.GeneratedMessage {
-  factory GCSFetchPresignUrlResponse({
-    $core.String? presignedUrl,
-    $core.String? message,
-  }) {
-    final $result = create();
-    if (presignedUrl != null) {
-      $result.presignedUrl = presignedUrl;
-    }
-    if (message != null) {
-      $result.message = message;
-    }
-    return $result;
-  }
+  factory GCSFetchPresignUrlResponse() => create();
   GCSFetchPresignUrlResponse._() : super();
   factory GCSFetchPresignUrlResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GCSFetchPresignUrlResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -695,7 +541,7 @@ class GCSFetchPresignUrlResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasPresignedUrl() => $_has(0);
   @$pb.TagNumber(1)
-  void clearPresignedUrl() => $_clearField(1);
+  void clearPresignedUrl() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get message => $_getSZ(1);
@@ -704,24 +550,11 @@ class GCSFetchPresignUrlResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasMessage() => $_has(1);
   @$pb.TagNumber(2)
-  void clearMessage() => $_clearField(2);
+  void clearMessage() => clearField(2);
 }
 
-/// The metadata of the file
 class FileInfo extends $pb.GeneratedMessage {
-  factory FileInfo({
-    $core.String? fileName,
-    $core.String? fileType,
-  }) {
-    final $result = create();
-    if (fileName != null) {
-      $result.fileName = fileName;
-    }
-    if (fileType != null) {
-      $result.fileType = fileType;
-    }
-    return $result;
-  }
+  factory FileInfo() => create();
   FileInfo._() : super();
   factory FileInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory FileInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -760,7 +593,7 @@ class FileInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasFileName() => $_has(0);
   @$pb.TagNumber(1)
-  void clearFileName() => $_clearField(1);
+  void clearFileName() => clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get fileType => $_getSZ(1);
@@ -769,7 +602,7 @@ class FileInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasFileType() => $_has(1);
   @$pb.TagNumber(2)
-  void clearFileType() => $_clearField(2);
+  void clearFileType() => clearField(2);
 }
 
 enum UploadFileRequest_Data {
@@ -778,21 +611,8 @@ enum UploadFileRequest_Data {
   notSet
 }
 
-/// The request message for file upload
 class UploadFileRequest extends $pb.GeneratedMessage {
-  factory UploadFileRequest({
-    FileInfo? info,
-    $core.List<$core.int>? fileChunk,
-  }) {
-    final $result = create();
-    if (info != null) {
-      $result.info = info;
-    }
-    if (fileChunk != null) {
-      $result.fileChunk = fileChunk;
-    }
-    return $result;
-  }
+  factory UploadFileRequest() => create();
   UploadFileRequest._() : super();
   factory UploadFileRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UploadFileRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -831,20 +651,19 @@ class UploadFileRequest extends $pb.GeneratedMessage {
   static UploadFileRequest? _defaultInstance;
 
   UploadFileRequest_Data whichData() => _UploadFileRequest_DataByTag[$_whichOneof(0)]!;
-  void clearData() => $_clearField($_whichOneof(0));
+  void clearData() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
   FileInfo get info => $_getN(0);
   @$pb.TagNumber(1)
-  set info(FileInfo v) { $_setField(1, v); }
+  set info(FileInfo v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasInfo() => $_has(0);
   @$pb.TagNumber(1)
-  void clearInfo() => $_clearField(1);
+  void clearInfo() => clearField(1);
   @$pb.TagNumber(1)
   FileInfo ensureInfo() => $_ensure(0);
 
-  /// The actual file content, sent in chunks
   @$pb.TagNumber(2)
   $core.List<$core.int> get fileChunk => $_getN(1);
   @$pb.TagNumber(2)
@@ -852,24 +671,11 @@ class UploadFileRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasFileChunk() => $_has(1);
   @$pb.TagNumber(2)
-  void clearFileChunk() => $_clearField(2);
+  void clearFileChunk() => clearField(2);
 }
 
-/// The response message for file upload
 class UploadFileResponse extends $pb.GeneratedMessage {
-  factory UploadFileResponse({
-    $core.String? filePath,
-    $fixnum.Int64? fileSize,
-  }) {
-    final $result = create();
-    if (filePath != null) {
-      $result.filePath = filePath;
-    }
-    if (fileSize != null) {
-      $result.fileSize = fileSize;
-    }
-    return $result;
-  }
+  factory UploadFileResponse() => create();
   UploadFileResponse._() : super();
   factory UploadFileResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UploadFileResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -908,7 +714,7 @@ class UploadFileResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasFilePath() => $_has(0);
   @$pb.TagNumber(1)
-  void clearFilePath() => $_clearField(1);
+  void clearFilePath() => clearField(1);
 
   @$pb.TagNumber(3)
   $fixnum.Int64 get fileSize => $_getI64(1);
@@ -917,7 +723,7 @@ class UploadFileResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasFileSize() => $_has(1);
   @$pb.TagNumber(3)
-  void clearFileSize() => $_clearField(3);
+  void clearFileSize() => clearField(3);
 }
 
 
