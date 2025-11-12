@@ -12,9 +12,10 @@ dependencies:
     sdk: flutter
   protobuf: ^3.1.0
   grpc: ^3.2.4
-  http: ^1.2.0
+  http: ^1.2.2
   mime: ^1.0.0
   path: ^1.9.0
+  dio: ^5.4.3
 
 dev_dependencies:
   flutter_test:
