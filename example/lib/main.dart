@@ -22,8 +22,8 @@ class _MyAppState extends State<MyApp> {
   String? _currentAuthToken; // To store the current token
 
   // TODO: Replace with your actual server address and port
-  static const String _serverAddress = 'localhost';
-  static const int _serverPort = 9090;
+  static const String _serverAddress = '0.tcp.jp.ngrok.io';
+  static const int _serverPort = 10251;
 
   late final ClientChannel _channel;
   late UploadService _uploadService; // Make it late and not final, so it can be re-initialized
