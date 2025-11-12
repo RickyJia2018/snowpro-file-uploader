@@ -59,11 +59,21 @@ class UploadProgress {
 class UploadService {
   final ClientChannel _channel; // ignore: unused_field
   final PeakPalClient _peakPalClient;
-  final http.Client _httpClient; // ignore: unused_field // Still needed for direct GCS upload
+  final http.Client _httpClient; // ignore: unused_field
+  final String? _authToken; // New field for authentication token
 
-  UploadService(this._channel, {http.Client? httpClient})
+  UploadService(this._channel, {http.Client? httpClient, String? authToken})
       : _peakPalClient = PeakPalClient(_channel),
-        _httpClient = httpClient ?? http.Client();
+        _httpClient = httpClient ?? http.Client(),
+        _authToken = authToken; // Initialize authToken
+
+  CallOptions? _getCallOptions() {
+    if (_authToken != null && _authToken.isNotEmpty) {
+      return CallOptions(metadata: {'authorization': 'Bearer $_authToken'});
+    }
+    return null;
+  }
+
 
   /// Uploads a file to GCS using a presigned URL and confirms with the server.
   ///
@@ -103,6 +113,7 @@ class UploadService {
       final fileUrl = presignUrlResponse.fileUrl;
       // final bucketName = presignUrlResponse.bucketName; // Removed: bucketName not in response
 
+      print('DEBUG: Before _uploadToGcs await for loop');
       // 2. Upload the file directly to the presigned URL
       await for (final progress in _uploadToGcs(
         file: file,
@@ -111,17 +122,23 @@ class UploadService {
       )) {
         yield UploadProgress(fileName: fileName, status: UploadStatus.uploading, progress: progress);
       }
+      print('DEBUG: After _uploadToGcs await for loop');
 
+      print('DEBUG: Before file.length()');
+      final int fileSize = await file.length();
+      print('DEBUG: After file.length(), fileSize: $fileSize');
+
+      print('DEBUG: Before _confirmUpload');
       // 3. Confirm the upload with the PeakPal server
       final confirmUploadResponse = await _confirmUpload(
         fileName: fileName,
-        fileSize: await file.length(),
+        fileSize: fileSize,
         fileType: fileType,
         category: category,
         fileUrl: fileUrl,
-        // bucketName: bucketName, // Removed: bucketName not in response
         expiredAt: expiredAt,
       );
+      print('DEBUG: After _confirmUpload');
 
       if (confirmUploadResponse.uploadedFile.filePath.isEmpty) {
         throw Exception('Failed to confirm upload with server.');
@@ -156,7 +173,7 @@ class UploadService {
       request.expiredAt = Timestamp.fromDateTime(expiredAt.toUtc());
     }
 
-    final response = await _peakPalClient.getGCSUploadPresignUrl(request);
+    final response = await _peakPalClient.getGCSUploadPresignUrl(request, options: _getCallOptions());
     return response;
   }
 
@@ -165,30 +182,31 @@ class UploadService {
     required Uri presignedUrl,
     required String fileName,
   }) async* {
-    final stream = file.openRead();
-    final length = await file.length();
+    // print('DEBUG: _uploadToGcs started');
+    final bytes = await file.readAsBytes(); // Read entire file into memory
+    // print('DEBUG: file.readAsBytes() completed');
     final mimeType = lookupMimeType(file.path) ?? 'application/octet-stream'; // Detect MIME type
 
-    final request = http.StreamedRequest('PUT', presignedUrl);
-    request.headers['Content-Type'] = mimeType; // Use detected MIME type
-    request.contentLength = length;
+    // print('DEBUG: Detected MIME type: $mimeType');
+    // print('DEBUG: Presigned URL: $presignedUrl');
 
-    int bytesSent = 0;
+    final response = await http.put(
+      presignedUrl,
+      headers: {
+        'Content-Type': mimeType, // Use detected MIME type
+      },
+      body: bytes,
+    );
 
-    await for (final chunk in stream) {
-      request.sink.add(chunk);
-      bytesSent += chunk.length;
-      yield bytesSent / length; // Yield progress directly from the generator
-    }
+    // print('DEBUG: http.put() completed with status: ${response.statusCode}');
 
-    await request.sink.close(); // Close the sink after all chunks are added
-    final response = await request.send();
-
-    if (response.statusCode != 200) {
-      final responseBody = await response.stream.bytesToString();
+    if (response.statusCode == 200) {
+      yield 1.0; // Indicate 100% progress after successful upload
+    } else {
       throw Exception(
-          'Failed to upload to GCS: ${response.statusCode} ${response.reasonPhrase}. Body: $responseBody');
+          'Failed to upload to GCS: ${response.statusCode} ${response.reasonPhrase}. Body: ${response.body}');
     }
+    // print('DEBUG: _uploadToGcs finished successfully');
   }
 
   Future<ConfirmUploadResponse> _confirmUpload({
@@ -207,12 +225,15 @@ class UploadService {
     request.category = category;
     request.bucketName = ''; // Set to empty string as it's not from presign response
     request.inUse = true; // Assuming it's in use after upload
-    if (expiredAt != null) {
-      request.expiredAt = Timestamp.fromDateTime(expiredAt.toUtc());
-    }
+
+    // Provide a default far-future date if expiredAt is null
+    final effectiveExpiredAt =
+        expiredAt ?? DateTime.now().add(const Duration(days: 365 * 100));
+    request.expiredAt = Timestamp.fromDateTime(effectiveExpiredAt.toUtc());
+
     request.filePath = fileUrl;
 
-    final response = await _peakPalClient.confirmUpload(request);
+    final response = await _peakPalClient.confirmUpload(request, options: _getCallOptions());
     return response;
   }
 }
